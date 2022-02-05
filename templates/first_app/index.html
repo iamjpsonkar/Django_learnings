@@ -1,13 +1,17 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
     <head>
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/style.css" rel="stylesheet">
+        <link href="{% static 'css/mycss.css' %}" rel="stylesheet">
+
     </head>
     <body>
         <h1>Hello I am using templates/first_app/index.html to print your name</h1>
         <h2>{{ myname }}</h2>
+        <h3>Django Image</h3>
+        <img src="{% static 'images/DjangoFeaturedImage.jpeg' %}" alt="Image Not Found!!!" width="600px" height="400px"/>
     </body>
 </html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <title>Users</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{% static 'css/mycss.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Below is the list of users</h1>
+        <table class="bd1">
+            <tr class="bd1">
+                <th class="bd1">First Name</th>
+                <th class="bd1">Last Name</th>
+                <th class="bd1">Email</th>
+            </tr>
+            {% for usr in user_data %}
+                <tr class="bd1">
+                    <th class="bd1">{{usr.fname}}</th>
+                    <th class="bd1">{{usr.lname}}</th>
+                    <th class="bd1">{{usr.email}}</th>
+                </tr>
+            {% endfor %}
+        </table>
+        
+    </body>
+</html>

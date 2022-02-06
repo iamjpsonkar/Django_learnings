@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from first_app.models import Topic, Webpage, AccessRecord
+from first_app.models import Topic, Webpage, AccessRecord, User
 
 # Create your views here.
 def index(request=None):
@@ -12,3 +12,9 @@ def data_index(request=None):
     date_dict={'access_record':webpage_list}
     return render(request,'first_app/data_index.html',context=date_dict)
     
+def user_index(request=None):
+    user_list=User.objects.values()
+    user_dict={
+        'user_data':user_list
+    }
+    return render(request,'first_app/user_index.html',context=user_dict)

@@ -20,4 +20,5 @@ from first_app import views
 urlpatterns = [
     path('',views.index,name="index"),
     path('data/',views.data_index,name="data_index"),
+    path('user/',views.user_index,name="user_index"),
 ]

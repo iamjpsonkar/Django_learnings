@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <title>Data</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{% static 'css/mycss.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <h1>Below is data from database</h1>
+        <table style="border:1px solid black;">
+            <tr style="border:1px solid black;">
+                <th style="border:1px solid black;">Site Name</th>
+                <th style="border:1px solid black;">Accessed Date</th>
+            </tr>
+            {% for acc in access_record %}
+            <tr style="border:1px solid black;">
+                <td style="border:1px solid black;">{{ acc.name }}</td>
+                <td style="border:1px solid black;">{{ acc.date }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    
+    </body>
+</html>

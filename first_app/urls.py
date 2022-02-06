@@ -22,4 +22,5 @@ urlpatterns = [
     path('data/',views.data_index,name="data_index"),
     path('user/',views.user_index,name="user_index"),
     path('basicform/',views.form_name_view,name="form_name"),
+    path('signup/',views.signup_user,name="signup_user"),
 ]

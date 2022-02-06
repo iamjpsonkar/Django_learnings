@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from first_app.models import Topic, Webpage, AccessRecord, User
+from . import forms
 
 # Create your views here.
 def index(request=None):
@@ -18,3 +19,18 @@ def user_index(request=None):
         'user_data':user_list
     }
     return render(request,'first_app/user_index.html',context=user_dict)
+
+def form_name_view(request):
+    form=forms.FormName()
+    
+    if request.method=='POST':
+        form=forms.FormName(request.POST)
+        
+        if form.is_valid():
+            print("Validation Success!!!")
+            print("Name:  ",form.cleaned_data['name'])
+            print("Email: ",form.cleaned_data['email'])
+            print("Text:  ",form.cleaned_data['text'])
+            
+    return render(request,'first_app/basicform.html',context={'form':form})
+    

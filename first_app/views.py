@@ -8,7 +8,7 @@ from first_app.forms import NewUserForm
 
 # Create your views here.
 def index(request=None):
-    my_dict={'myname':'Jay Prakash Sonkar'}
+    my_dict={'myname':'Jay Prakash Sonkar','text':"I am Text",'number':1000}
     return render(request,'first_app/index.html',context=my_dict)
 
 def data_index(request=None):

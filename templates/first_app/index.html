@@ -2,8 +2,12 @@
 {% extends 'first_app/base_template.html' %}
 {% load static %}
     {% block body_block %}
-        <h1>Hello I am using templates/first_app/index.html to print your name</h1>
-        <h2>{{ myname }}</h2>
-        <h3>Django Image</h3>
+        <h3>Hello I am using templates/first_app/index.html to print your name</h3>
+        <h3>{{ myname }}</h3>
+        <p>text: {{ text }}</p>
+        <p>text in CAPITAL: {{ text|upper }}</p>
+        <p>number: {{ number }}</p>
+        <p>number+998: {{ number|add:"998" }}</p>
+        <p>Django Image</p>
         <img src="{% static 'images/DjangoFeaturedImage.jpeg' %}" alt="Image Not Found!!!" width="600px" height="400px"/>
     {% endblock %}

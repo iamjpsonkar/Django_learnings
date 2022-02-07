@@ -4,6 +4,8 @@ from first_app.models import Topic, Webpage, AccessRecord, User
 from . import forms
 from first_app.forms import NewUserForm
 
+app_name = "first_app"
+
 # Create your views here.
 def index(request=None):
     my_dict={'myname':'Jay Prakash Sonkar'}
@@ -48,3 +50,9 @@ def signup_user(request):
             print("Form Invalid!!!")
             
     return render(request,'first_app/signup.html',{'form':form})    
+
+def relative_url(request):
+    return render(request,'first_app/relative_url.html')
+
+def other_page(request):
+    return render(request,'first_app/otherpage.html')

@@ -21,10 +21,10 @@ app_name = "first_app"
 
 urlpatterns = [
     path('',views.index,name="index"),
-    path('data/',views.data_index,name="data_index"),
-    path('user/',views.user_index,name="user_index"),
-    path('basicform/',views.form_name_view,name="form_name"),
-    path('signup/',views.signup_user,name="signup_user"),
+    path('data/',views.data_index,name="data"),
+    path('user/',views.user_index,name="user"),
+    path('basicform/',views.form_name_view,name="basicform"),
+    path('signup/',views.signup_user,name="signup"),
     path('relative_url/',views.relative_url,name="relative_url"),
     path('other_page/',views.other_page,name="other_page"),
 ]

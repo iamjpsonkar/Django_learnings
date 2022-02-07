@@ -4,7 +4,7 @@ from first_app.models import Topic, Webpage, AccessRecord, User
 from . import forms
 from first_app.forms import NewUserForm
 
-app_name = "first_app"
+
 
 # Create your views here.
 def index(request=None):

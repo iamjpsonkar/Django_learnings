@@ -1,13 +1,6 @@
 <!DOCTYPE html>
-{% load static %}
-<html lang="en">
-    <head>
-        <title>Users</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="{% static 'css/mycss.css' %}" rel="stylesheet">
-    </head>
-    <body>
+{% extends 'first_app/base_template.html' %}
+    {% block body_block %}
         <h1>Below is the list of users</h1>
         <table class="bd1">
             <tr class="bd1">
@@ -23,6 +16,4 @@
                 </tr>
             {% endfor %}
         </table>
-        
-    </body>
-</html>
+     {% endblock %}

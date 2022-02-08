@@ -27,4 +27,5 @@ urlpatterns = [
     path('signup/',views.signup_user,name="signup"),
     path('relative_url/',views.relative_url,name="relative_url"),
     path('other_page/',views.other_page,name="other_page"),
+    path('register/',views.register,name="register"),
 ]

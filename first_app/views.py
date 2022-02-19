@@ -9,6 +9,9 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.views.generic import ListView
 from django.views.generic import DetailView
+from django.views.generic import (CreateView,UpdateView,
+                                  DeleteView)
+from django.urls import reverse_lazy
 
 class CBVHello(View):
     def get(self,request):
@@ -25,15 +28,27 @@ class CBTVIndex(TemplateView):
 class SchoolListView(ListView):
     model=School
     context_object_name ='schools' # default value is lower(model)+"_list"
+    
 class SchoolDetailView(DetailView):
     model=School
     context_object_name ='school_detail' # default value is lower(model)"
     template_name='first_app/school_detail.html'
     
-    # def __init__(self,s_id,*args,**kwargs):
-    #     super().__init__(*args,**kwargs)
-    #     self.s_id=s_id
-        
+class SchoolCreateView(CreateView):
+    # Using ModelFormMixin (base class of SchoolCreateView) without the 'fields' attribute is prohibited.
+    # add below line to avoid above errors
+    fields=('name','principal','location') # to avoid field error
+    model=School
+    
+class SchoolUpdateView(UpdateView):
+    # Using ModelFormMixin (base class of SchoolCreateView) without the 'fields' attribute is prohibited.
+    # add below line to avoid above errors
+    fields=('name','principal') # to avoid field error
+    model=School
+    
+class SchoolDeleteView(DeleteView):
+    model=School
+    success_url=reverse_lazy("first_app:list")
     
 
 

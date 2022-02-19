@@ -30,9 +30,12 @@ urlpatterns = [
     path('register/',views.register,name="register"),
     path('cbvhello/',views.CBVHello.as_view(),name="cbvhello"),
     path('cbtvindex/',views.CBTVIndex.as_view(),name="cbtvindex"),
-    path('cblv/',views.SchoolListView.as_view(),name="cblv"),
-    
-    path('cblv/<int:pk>/',views.SchoolDetailView.as_view(),name="cbdv"),
+    path('cblv/',views.SchoolListView.as_view(),name="list"),  
+    path('cblv/<int:pk>/',views.SchoolDetailView.as_view(),name="detail"),
+    # path('detail/<int:pk>/',views.SchoolDetailView.as_view(),name="detail"),
+    path('create/',views.SchoolCreateView.as_view(),name="create"),
+    path('update/<int:pk>/',views.SchoolUpdateView.as_view(),name="update"),
+    path('delete/<int:pk>/',views.SchoolDeleteView.as_view(),name="delete"),
    
     
 ]

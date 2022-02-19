@@ -11,6 +11,13 @@
         <li> {{student.name}} who is {{student.age}} years old</li>
     {%endfor%}
 </ol>
+<div class="container">
+    <p>
+        <a class="btn btn-warning" href="{% url 'first_app:update' pk=school_detail.pk %}">Update</a>
+        <a href="{% url 'first_app:list' %}" class="btn btn-success">Back</a>
+    </p>
+
+</div>
 
 
 {% endblock %}

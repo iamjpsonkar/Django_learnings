@@ -4,6 +4,13 @@ from first_app.models import Topic, Webpage, AccessRecord, User
 from . import forms
 from first_app.forms import NewUserForm, UserForm, UserProfileInfoForm
 
+from django.views.generic import View 
+from django.http import HttpResponse
+
+class CBVHello(View):
+    def get(self,request):
+        return HttpResponse("Hello using Class Based View CBV")
+
 
 
 # Create your views here.

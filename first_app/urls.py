@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,re_path
 from first_app import views
 
 app_name = "first_app"
@@ -30,4 +30,11 @@ urlpatterns = [
     path('register/',views.register,name="register"),
     path('cbvhello/',views.CBVHello.as_view(),name="cbvhello"),
     path('cbtvindex/',views.CBTVIndex.as_view(),name="cbtvindex"),
+    path('cblv/',views.SchoolListView.as_view(),name="cblv"),
+    
+    path('cblv/<int:pk>/',views.SchoolDetailView.as_view(),name="cbdv"),
+   
+    
 ]
+#  re_path(r'^cblv/(?P<pk>[-\w]+)/$',views.SchoolDetailView.as_view(),name="cbdv"),
+# 

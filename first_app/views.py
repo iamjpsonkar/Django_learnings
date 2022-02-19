@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from first_app.models import Topic, Webpage, AccessRecord, User
+from first_app.models import Topic, Webpage, AccessRecord, User , School , Student
 from . import forms
 from first_app.forms import NewUserForm, UserForm, UserProfileInfoForm
 
 from django.views.generic import View 
 from django.http import HttpResponse
 from django.views.generic import TemplateView
+from django.views.generic import ListView
+from django.views.generic import DetailView
 
 class CBVHello(View):
     def get(self,request):
@@ -19,6 +21,20 @@ class CBTVIndex(TemplateView):
         context=super().get_context_data(**kwargs)
         context['yourname']='Jay Prakash Sonkar'
         return context
+    
+class SchoolListView(ListView):
+    model=School
+    context_object_name ='schools' # default value is lower(model)+"_list"
+class SchoolDetailView(DetailView):
+    model=School
+    context_object_name ='school_detail' # default value is lower(model)"
+    template_name='first_app/school_detail.html'
+    
+    # def __init__(self,s_id,*args,**kwargs):
+    #     super().__init__(*args,**kwargs)
+    #     self.s_id=s_id
+        
+    
 
 
 

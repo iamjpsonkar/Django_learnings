@@ -6,10 +6,19 @@ from first_app.forms import NewUserForm, UserForm, UserProfileInfoForm
 
 from django.views.generic import View 
 from django.http import HttpResponse
+from django.views.generic import TemplateView
 
 class CBVHello(View):
     def get(self,request):
         return HttpResponse("Hello using Class Based View CBV")
+    
+class CBTVIndex(TemplateView):
+    template_name='first_app/Tindex.html'
+    
+    def get_context_data(self,**kwargs):
+        context=super().get_context_data(**kwargs)
+        context['yourname']='Jay Prakash Sonkar'
+        return context
 
 
 

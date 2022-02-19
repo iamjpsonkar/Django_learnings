@@ -29,4 +29,5 @@ urlpatterns = [
     path('other_page/',views.other_page,name="other_page"),
     path('register/',views.register,name="register"),
     path('cbvhello/',views.CBVHello.as_view(),name="cbvhello"),
+    path('cbtvindex/',views.CBTVIndex.as_view(),name="cbtvindex"),
 ]

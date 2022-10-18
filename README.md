@@ -485,3 +485,261 @@ In templates/first_app/signup.html add below lines of code
 </html>
 ```
 
+## Django Template Inheritance
+We can inherit one html file in other, using django
+
+Steps for template inheritance
+
+1. Create base html file : templates/first_app/base_template.html
+```html
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <link href="{% static 'css/mycss.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container">
+            <!--  Your Code -->
+        </div>
+        <div class="container">
+            {% block body_block %}
+            <!-- Everything Inside this will be replaced!!! -->
+            {% endblock %}
+        </div>
+
+    </body>
+</html>
+```
+
+2. Create child html files : templates/first_app/basicform.html
+```html
+<!DOCTYPE html>
+{% extends 'first_app/base_template.html' %}
+{% load static %}
+{% block body_block %}
+    <h1>Basic Form</h1>
+    <div class="container">
+        <form method="POST">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <input type="Submit" value="Submit"/>
+        </form>
+    </div>
+{% endblock %}
+```
+
+## Django Template Filters
+There are some filters provided by django
+```html
+<p>text in CAPITAL: {{ text|upper }}</p>
+<p>number: {{ number }}</p>
+<p>number+998: {{ number|add:"998" }}</p>
+```
+
+## Django Class-Based Views
+Class-based views can be used in place of function-based views. All the operations handle using Python objects instead of functions. They provide some excellent example over the function-based views. Class-based views can implement CRUD operation in easy manner.
+
+In first_app/views.py
+```python
+from django.views.generic import View 
+from django.http import HttpResponse
+
+class CBVHello(View):
+    def get(self,request):
+        return HttpResponse("Hello using Class Based View CBV")
+```
+
+In first_app/urls.py
+```python
+path('cbvhello/',views.CBVHello.as_view(),name="cbvhello"),
+```
+
+In templates/first_app/base_template.html
+```html
+<li class="nav-item">
+    <a class="nav-link" href="{% url 'first_app:cbvhello' %}">CBVHello</a>
+</li>
+```
+
+### Context Passing
+
+In first_app/urls.py
+```python
+path('cbvhello/',views.CBVHello.as_view(),name="cbvhello"),
+```
+
+In first_app/views.py
+```python
+from django.views.generic import TemplateView
+
+class CBTVIndex(TemplateView):
+    template_name='first_app/Tindex.html'
+
+    def get_context_data(self,**kwargs):
+        context=super().get_context_data(**kwargs)
+        context['yourname']='Jay Prakash Sonkar'
+        return context
+```
+
+In templates/first_app/Tindex.html
+```html
+<!DOCTYPE html>
+{% extends 'first_app/base_template.html' %}
+{% load static %}
+{% load my_extras %}
+    {% block body_block %}
+        <h3>Hello I am using Class Based Template View (CBTV) to print your name</h3>
+        <h1>{{ yourname }}</h1>
+    {% endblock %}
+```
+
+### Class Based List View
+
+In first_app/models.py
+```python
+class School(models.Model):
+    name=models.CharField(max_length=256)
+    principal=models.CharField(max_length=256)
+    location=models.CharField(max_length=256)
+
+    def __str__(self):
+        return self.name
+
+
+class Student(models.Model):
+    name=models.CharField(max_length=256)
+    age=models.PositiveIntegerField()
+    school=models.ForeignKey(School,related_name='students',on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+```
+
+In first_app/templates/first_app/school_list.html
+```html
+{% extends 'first_app/first_app_base.html' %}
+
+{% block body_block %}
+<h1>List Of schools</h1>
+<ol>
+    {% for school in schools %}
+    <li><h2><a href="{{school.id}}">{{school.name}}</a></h2></li>
+    {% endfor %}
+</ol>
+{% endblock %}
+```
+
+In first_app/views.py
+```python
+from django.views.generic import ListView
+
+class SchoolListView(ListView):
+    model=School
+    context_object_name ='schools' # default value is lower(model)+"_list"
+```
+
+
+### Class Based Detail View
+
+
+In first_app/models.py
+```python
+class School(models.Model):
+    name=models.CharField(max_length=256)
+    principal=models.CharField(max_length=256)
+    location=models.CharField(max_length=256)
+
+    def __str__(self):
+        return self.name
+
+
+class Student(models.Model):
+    name=models.CharField(max_length=256)
+    age=models.PositiveIntegerField()
+    school=models.ForeignKey(School,related_name='students',on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+```
+
+In first_app/templates/first_app/school_detail.html
+```html
+{% extends 'first_app/first_app_base.html' %}
+
+{% block body_block %}
+<h1>Details Of schools</h1>
+<p>Name: {{school_detail.name }}</p>
+<p>Prinicipal: {{school_detail.principal }}</p>
+<p>Location: {{school_detail.location }}</p>
+<p>Students: </p>
+<ol>
+    {% for student in school_detail.students.all %}
+        <li> {{student.name}} who is {{student.age}} years old</li>
+    {%endfor%}
+</ol>
+
+
+{% endblock %}
+```
+
+In first_app/views.py
+```python
+from django.views.generic import DetailView
+
+class SchoolDetailView(DetailView):
+    model=School
+    context_object_name ='school_detail' # default value is lower(model)"
+    template_name='first_app/school_detail.html'
+```
+
+### CreateView, UpdateView, DeleteView
+In first_app/views.py
+```python
+from django.views.generic import (CreateView,UpdateView,DeleteView)
+from django.urls import reverse_lazy
+
+class SchoolCreateView(CreateView):
+    # Using ModelFormMixin (base class of SchoolCreateView) without the 'fields' attribute is prohibited.
+    # add below line to avoid above errors
+    fields=('name','principal','location') # to avoid field error
+    model=School
+
+class SchoolUpdateView(UpdateView):
+    # Using ModelFormMixin (base class of SchoolCreateView) without the 'fields' attribute is prohibited.
+    # add below line to avoid above errors
+    fields=('name','principal') # to avoid field error
+    model=School
+
+class SchoolDeleteView(DeleteView):
+    model=School
+    success_url=reverse_lazy("first_app:list")
+```
+
+In first_app/templates/first_app/school_form.html
+```html
+{% extends 'first_app/first_app_base.html' %}
+{% block body_block %}
+<h1>
+    {% if not form.instance.pk %}
+    Create School 
+    {% else %} 
+    Update School 
+    {% endif %}
+</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-info" value="submit"/>
+</form>
+
+
+{% endblock %}
+```
+
+In first_app/urls.py
+```python
+path('create/',views.SchoolCreateView.as_view(),name="create"),
+path('update/<int:pk>/',views.SchoolUpdateView.as_view(),name="update"),
+path('delete/<int:pk>/',views.SchoolDeleteView.as_view(),name="delete"),
+```

@@ -363,5 +363,125 @@ Open first_app/urls.py and add new url for the data_index
 ```python
 path('data/',views.data_index,name="data_index"),
 ```
-
 Save and reload
+
+## Django Forms
+Django provides a Form class which is used to create HTML forms. It describes a form and how it works and appears.
+
+Create first_app/forms.py and add below lines
+```python
+from django import forms
+class FormName(forms.Form):
+    name=forms.CharField()
+    email=forms.EmailField()
+    text=forms.CharField(widget=forms.Textarea)
+```
+
+Open views.py add new function and logic
+```python
+from . import forms
+def form_name_view(request):
+    form=forms.FormName()
+    
+    if request.method=='POST':
+        form=forms.FormName(request.POST)
+        
+        if form.is_valid():
+            print("Validation Success!!!")
+            print("Name:  ",form.cleaned_data['name'])
+            print("Email: ",form.cleaned_data['email'])
+            print("Text:  ",form.cleaned_data['text'])
+    return render(request,'first_app/basicform.html',context={'form':form})
+```
+
+create basicform.html and html code
+```html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <h1>Basic Form</h1>
+        <div class="container">
+            <form method="POST">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <input type="Submit" value="Submit"/>
+            </form>
+        </div>
+    </body>
+</html>
+```
+**csrf_toke** This is very important for django forms, it basically pprovides a unique identification to the form.
+
+## Django Model Form
+It is a class which is used to create an HTML form by using the Model. It is an efficient way to create a form without writing HTML code.
+
+Django automatically does it for us to reduce the application development time. For example, suppose we have a model containing various fields, we don't need to repeat the fields in the form file.
+
+For this reason, Django provides a helper class which allows us to create a Form class from a Django model.
+
+In first_app/forms.py add below lines of code
+```python
+from first_app.models import User
+
+class NewUserForm(forms.ModelForm):
+    class Meta:
+        model=User
+        fields='__all__'
+```
+
+In first_app/urls.py add below paths
+```python
+path('signup/',views.signup_user,name="signup_user"),
+```
+
+In first_app/views.py add below lines of code
+```python
+from first_app.forms import NewUserForm
+
+
+def signup_user(request):
+    form=NewUserForm()
+
+    if request.method=='POST':
+        form=NewUserForm(request.POST) 
+        if form.is_valid():
+            form.save(commit=True)
+            return index(request)
+        else:
+            print("Form Invalid!!!")
+
+    return render(request,'first_app/signup.html',{'form':form}) 
+```
+
+In templates/first_app/signup.html add below lines of code
+```html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Signup Here!!!</h2>
+            <form method="POST">
+                {{ form.as_p }}
+                {% csrf_token %}
+                <input type="submit" class="btn btn-primary" value="Submit"/>
+            </form>
+        </div>
+    </body>
+</html>
+```
+

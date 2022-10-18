@@ -269,3 +269,99 @@ Execute below command to create superuser for django admin
 <pre>python manage.py createsuperuser</pre>
 
 Now login to admin portal i.e. http://127.0.0.1:8000/admin
+
+### Populating Models
+For testing purpose, we can creata a python script, to populate some data to our models
+
+Steps to populate data to models
+1. Install Faker Module
+<pre>pip install Faker</pre>
+
+2. Create Faker Script:
+Create a python script first_project/populate_first_app.py and add below lines of code
+```python
+import os 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE','first_project.settings')
+
+import django 
+django.setup() 
+
+import random 
+from first_app.models import Topic,Webpage,AccessRecord
+from faker import Faker 
+
+fakegen=Faker() 
+topics=['Search',"Social","Marketplace","News","Games"]
+
+def add_topic():
+    t=Topic.objects.get_or_create(top_name=random.choice(topics))[0]
+    t.save()
+    return t 
+
+def populate(N=5):
+    for enrty in range(N):
+        top=add_topic()
+        
+        fake_url=fakegen.url()
+        fake_date=fakegen.date()
+        fake_name=fakegen.name()
+        
+        web_pg=Webpage.objects.get_or_create(topic=top,url=fake_url,name=fake_name)[0]
+        
+        acc_rcd=AccessRecord.objects.get_or_create(name=web_pg,date=fake_date)[0] 
+
+if __name__ == '__main__':
+    print("populating Script!")
+    populate(20)
+    print("populating complete!!")
+```
+
+3. Execute populating Script
+<pre>python populate_first_app.py</pre>
+
+4. Verify the populated data:
+Go to admin login and see the tables
+
+## Django MVT
+The MVT (Model View Template) is a software design pattern. It is a collection of three important components **Model View and Template**. 
+
+- The Model helps to handle database. It is a data access layer which handles the data.
+- The Template is a presentation layer which handles User Interface part completely.
+- The View is used to execute the business logic and interact with a model to carry data and renders a template.
+
+Although Django follows MVC pattern but maintains it's own conventions. So, control is handled by the framework itself.
+
+There is no separate controller and complete application is based on Model, View and Template. That's why it is called MVT application.
+
+Open first_app/views.py and add new function which retrives data from database, and send it as a context
+```python
+from first_app.models import Topic, Webpage, AccessRecord
+def data_index(request=None):
+    webpage_list=AccessRecord.objects.order_by('date')
+    date_dict={'access_record':webpage_list}
+    return render(request,'first_app/data_index.html',context=date_dict)
+```
+
+Create templates/first_app/data_index.html
+```html
+<h1>Below is data from database</h1>
+<table style="border:1px solid black;">
+    <tr style="border:1px solid black;">
+        <th style="border:1px solid black;">Site Name</th>
+        <th style="border:1px solid black;">Accessed Date</th>
+    </tr>
+    {% for acc in access_record %}
+        <tr style="border:1px solid black;">
+            <td style="border:1px solid black;">{{ acc.name }}</td>
+            <td style="border:1px solid black;">{{ acc.date }}</td>
+        </tr>
+    {% endfor %}
+</table>
+```
+
+Open first_app/urls.py and add new url for the data_index
+```python
+path('data/',views.data_index,name="data_index"),
+```
+
+Save and reload

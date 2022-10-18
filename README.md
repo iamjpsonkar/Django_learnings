@@ -106,7 +106,7 @@ path('first_app/',include("first_app.urls"))
 
 **Save everything and rerun your server, copy url 127.0.0.1:8000/first_app/ to see the output**
 
-## Templates
+## Django Templates
 In views.py we can define functions for difeerent views, but  for bigger apps, we need big html output, and returning/manageing such complex html string though the functions of views.py, is very tidius. These large htmls strings can be handled using templets.
 
 Templates are basically html files that can be retured by django view functions as a view.
@@ -154,7 +154,7 @@ def index(request=None):
 **To be completed**
 
 
-## Static files
+## Django Static files
 Any web developement project have some more type of files other then html files, these other files are known as static files.
 Like for html we have TEMPLATES, for other files such as images, css and javascript we have STATIC
 We can have two levels of static files
@@ -197,3 +197,75 @@ Now in index.html, add below lines after <!Doctype>
 ### App Level Static Files
 
 **To be completed**
+
+
+## Django Models
+Almost every web application, works/manage on Data. These Data are stored in Databases, in the form of tables. 
+- Handling of these type of data, is known as Backend.
+- Handling of HTML and views is Frontend.
+
+To communicate with data stored in databases, we use database languages, such as SQL, NO-SQL.
+
+Complex queries are written and executed to manage data stored in the databases.
+
+Django provides a functionality named **Model**, that can help us to avoid these extra complex querries, to handle such data.
+
+Structure of table can be defined as a class, these classed inherit Model class of django. After **Migration**, all these models are converted into tables.
+
+### Creating Models
+Inside your app, there is a models.py, add below lines of code to models.py
+```python
+class Topic(models.Model):
+    top_name=models.CharField(max_length=264,unique=True)
+    
+    def __str__(self):
+        return self.top_name
+```
+
+The above class, after migrating will create below  **Topic table**
+
+| top_name |
+|----------|
+| Topic-1  |
+| Topic-2  |
+
+In the same way, other tables can be created using Models
+
+### Migrations
+This basically saves/create our model for django
+
+For migrations execute below commands
+<pre>
+python manage.py migrate
+python manage.py makemigrations first_app
+python manage.py migrate
+</pre>
+
+### Verify Migrations
+Use python command line to check the migrations
+```python
+> python manage.py shell
+>>> from first_app.models import Topic
+>>> print(Topic.objects.all())
+<QuerySet []>
+>>> t=Topic(top_name="Social Network")
+>>> t.save()
+>>> print(Topic.objects.all())
+<QuerySet [<Topic: Social Network>]>
+>>> exit()
+```
+
+### Register Model
+Newly created models, needs to be registered with django.
+
+To register, newly created models, open first_app/admin.py and add below lines
+```python
+from first_app.models import Topic,Webpage,AccessRecord
+admin.site.register(Topic)
+```
+
+### Superuser for admin
+Execute below command to create superuser for django admin
+<pre>python manage.py createsuperuser</pre>
+
+Now login to admin portal i.e. http://127.0.0.1:8000/admin
